@@ -1,0 +1,5 @@
+{"date":"2025-01-10","stock":"AAPL","buy_price":150.0,"sell_price":155.0,"quantity":10,"profit":50.0,"diff":1,"time":1761192341762}
+{"date":"2025-01-10","stock":"GOOGL","buy_price":2800.0,"sell_price":2850.0,"quantity":3,"profit":150.0,"diff":1,"time":1761192341762}
+{"date":"2025-01-12","stock":"AAPL","buy_price":152.0,"sell_price":160.0,"quantity":5,"profit":40.0,"diff":1,"time":1761192341762}
+{"date":"2025-01-11","stock":"TSLA","buy_price":700.0,"sell_price":730.0,"quantity":8,"profit":240.0,"diff":1,"time":1761192341762}
+{"date":"2025-01-11","stock":"AMZN","buy_price":3300.0,"sell_price":3400.0,"quantity":3,"profit":300.0,"diff":1,"time":1761192341762}

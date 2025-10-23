@@ -1,21 +1,45 @@
 import pathway as pw
 
-# Define the schema for the CSV file
-class Measurement(pw.Schema):
-    name: str
-    value: float
+# Define schema for finance trades
+class Trade(pw.Schema):
+    date: str
+    stock: str
+    buy_price: float
+    sell_price: float
+    quantity: int
 
-# ✅ Read CSV file (use .read for modern Pathway)
-measurements = pw.io.csv.read("data/measurements.csv", schema=Measurement)
+# Read CSV file
+trades = pw.io.csv.read("data/trades.csv", schema=Trade)
 
-# Filter positive values only
-positive = measurements.filter(pw.this.value > 0)
+# Compute profit for each trade
+trades_with_profit = trades.select(
+    pw.this.date,
+    pw.this.stock,
+    pw.this.buy_price,
+    pw.this.sell_price,
+    pw.this.quantity,
+    profit=(pw.this.sell_price - pw.this.buy_price) * pw.this.quantity
+)
 
-# Select required columns
-result = positive.select(pw.this.name, pw.this.value)
+# Filter profitable trades
+profitable_trades = trades_with_profit.filter(pw.this.profit > 0)
 
-# ✅ Write results to a JSON Lines file
-pw.io.jsonlines.write(result, "out/results.jsonl")
+# Compute total daily profit across all stocks
+daily_profit = (
+    profitable_trades.groupby(pw.this.date)
+    .reduce(total_profit=pw.reducers.sum(pw.this.profit))
+)
 
-print("✅ Starting Pathway pipeline...")
+# Compute cumulative profit per stock
+cumulative_profit = (
+    profitable_trades.groupby(pw.this.stock)
+    .reduce(total_profit=pw.reducers.sum(pw.this.profit))
+)
+
+# Write outputs to JSONL
+pw.io.jsonlines.write(profitable_trades, "out/profitable_trades.jsonl")
+pw.io.jsonlines.write(daily_profit, "out/daily_profit.jsonl")
+pw.io.jsonlines.write(cumulative_profit, "out/stock_profit.jsonl")
+
+print("Starting Pathway finance pipeline with aggregation...")
 pw.run()
