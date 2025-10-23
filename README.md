@@ -13,7 +13,6 @@ docker run --rm -v "$(pwd)/data":/app/data -v "$(pwd)/out":/app/out pathway-demo
 
 FOLDER 2: pathway-task2
 To run this program, in the terminal:
-python simulation_without_pathway.py
-python simulation_with_pathway.py
+python simulation.py
 
 you can see the output in /out folder.
